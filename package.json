@@ -1,0 +1,12 @@
+{
+    "name": "login_website_template",
+    "version": "1.0.0",
+    "description": "Creating a website login template as a proof-of-concept",
+    "main": "test.js",
+    "type": "module",
+    "author": "tencalink0",
+    "license": "none",
+    "dependencies": {
+        "nodemon": "^3.1.3"
+    }
+}
