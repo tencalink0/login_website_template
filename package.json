@@ -4,6 +4,9 @@
     "description": "Creating a website login template as a proof-of-concept",
     "main": "test.js",
     "type": "module",
+    "scripts": {
+        "start": "nodemon --env-file=.env main.js"
+    },
     "author": "tencalink0",
     "license": "none",
     "dependencies": {
