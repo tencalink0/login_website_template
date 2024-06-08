@@ -5,7 +5,8 @@
     "main": "test.js",
     "type": "module",
     "scripts": {
-        "start": "nodemon --env-file=.env main.js"
+        "start": "nodemon --env-file=.env main.js",
+        "dev": "node --env-file=.env main.js"
     },
     "author": "tencalink0",
     "license": "none",
