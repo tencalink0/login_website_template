@@ -1,10 +1,14 @@
-# H1 Website Login System 
+# Website Login System 
 
-## H2 Description:
-To create a simple Login System using NodeJS as a proof of concept
+## Description:
+To create a simple Login System using NodeJS as a proof of concept.
 
-## H2 Features:
+## Features:
 - Created with **ESModules**
 - Dynamic HTML file reading
 - **Sha-256** Password Encryption
 - **MYSQL** integration
+
+## Uses:
+This software is unlicensed so use as you wish. I would like credit but it's up to you. 
+Code has been <sub><sup>attempted</sup></sub> to be made as modular as possible.
