@@ -46,6 +46,7 @@ class Database {
 
     runFunc(sql) {
         return new Promise((resolve, reject) => {
+            console.log("\x1b[33mSQL: " + sql + "\x1b[0m");
             this.db.run(sql, (err) => {
                 if (err) {
                     console.log("Database query failed ", err);
@@ -59,7 +60,7 @@ class Database {
 
     getFunc(sql) {
         return new Promise((resolve, reject) => {
-            console.log(sql);
+            console.log("\x1b[34mSQL: " + sql + "\x1b[0m");
             this.db.all(sql, (err, sqlData) => {
                 if (err) {
                     console.log("Database query failed ", err);

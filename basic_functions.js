@@ -1,22 +1,38 @@
+import { exec } from 'child_process';
 import {promises as fsPromises} from 'fs';
 import path from 'path';
 
-const getHTMLTemplates = async (__dirname) => {
-    let htmlTemplateDir = path.join(__dirname, "public");
-    let filesRaw = await fsPromises.readdir(htmlTemplateDir);
-    let files = await trimHTMLHeaders(filesRaw);
-    return files;
-};
+class Templates {
+    async html(__dirname) {
+        let htmlTemplateDir = path.join(__dirname, 'public');
+        let files = await fsPromises.readdir(htmlTemplateDir);
+        return files;
+    }
 
-function trimHTMLHeaders(filesRaw) {
-    let files = [];
-    filesRaw.forEach(fileRaw => {
-        fileRaw = fileRaw.split('.');
-        if (fileRaw[1] = 'html') {
-            files.push(fileRaw[0]);
+    async css(__dirname) {
+        let htmlTemplateDir = path.join(__dirname, 'static', 'css');
+        let files = await fsPromises.readdir(htmlTemplateDir);
+        return files;
+    }
+
+    async js(__dirname) {
+        let htmlTemplateDir = path.join(__dirname, 'static', 'js');
+        let files = await fsPromises.readdir(htmlTemplateDir);
+        return files;
+    }
+}
+
+function getHeader(request) {
+    try{
+        request = request.split('.');
+        if (request.length == 2) {
+            return request[1];
+        } else {
+            return ''; 
         }
-    });
-    return files;
+    } catch {
+        return '';
+    }
 }
 
 async function readTextFile(fileName) {
@@ -30,4 +46,4 @@ async function readTextFile(fileName) {
     }
 }
 
-export {getHTMLTemplates, trimHTMLHeaders, readTextFile};
+export {Templates, getHeader, readTextFile};

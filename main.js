@@ -1,12 +1,12 @@
 import http from 'http';
 import url from 'url';
 import path from 'path';
-import fs from 'fs/promises';
 
-import {getHTMLTemplates} from './basic_functions.js';
-import {toHTMLFile} from './conversions.js';
+import {Templates, getHeader} from './basic_functions.js';
 import {User} from './objects.js';
 import {Database} from './database.js';
+import {Request} from './requests.js'
+import {toHTMLFile, toCSSFile, toJSFile} from './conversions.js';
 
 const PORT = process.env.PORT;
 const DBKEY = process.env.DBKEY; 
@@ -18,40 +18,50 @@ const server = http.createServer(async (req, res) => {
     const user = new User;
     user.ip = req.socket.remoteAddress.split(':').pop();
     user.name = 'Unknown';
-    const database = new Database('./databases/logins.db');
-    const now = new Date();
 
-    console.log(user.ip + ' :: ' + req.url);
+    const database = new Database('./databases/logins.db');
+    const request = new Request(req, res, database, user);
 
     if (req.method === 'GET') {
-        const htmlTemplatesList = await getHTMLTemplates(__dirname);
+        const templates = new Templates();
+        const htmlTemplates = await templates.html(__dirname);
+        const cssTemplates = await templates.css(__dirname);
+        const jsTemplates = await templates.js(__dirname);
 
         if (req.url === '/') {
-            res.setHeader('Content-Type', 'text/html');
-            res.write('<h1> Hello World! </h1>');
-            const timeNow = now.toISOString().slice(0, 19).replace('T', ' ');
-            database.runFunc(`INSERT INTO requests (ip, time, page) VALUES ('${user.ip}','${timeNow}','${req.url}')`);
-        } else if (htmlTemplatesList.includes(req.url.slice(1))) {
-            const htmlFileName = await toHTMLFile(__dirname, req.url);
-            const htmlData = await fs.readFile(htmlFileName, 'utf8');
-            res.setHeader('Content-Type', 'text/html');
-            res.write(htmlData);
-            const timeNow = now.toISOString().slice(0, 19).replace('T', ' ');
-            database.runFunc(`INSERT INTO requests (ip, time, page) VALUES ('${user.ip}','${timeNow}','${req.url}')`);
-        } else if (req.url === '/clearServer') {
-            database.init(DBKEY)
+            request.sendFile('public/index.html','html');
+        } else if (getHeader(req.url) == 'html') { 
+            if (htmlTemplates.includes(req.url.slice(1)) && req.url !== '/main.html') {
+                const path = await toHTMLFile(__dirname, req.url);
+                request.sendFile(path,'html');
+            } else if (req.url === '/clearServer') {
+                database.init(DBKEY)
+            } else {
+                request.notFound();
+            };
+        } else if (getHeader(req.url) == 'css') {
+            if (cssTemplates.includes(req.url.slice(1))) {
+                const path = await toCSSFile(__dirname, req.url.slice(1));
+                request.sendFile(path, 'css');
+            } else {
+                request.notFound();
+            }
+        } else if (getHeader(req.url) == 'js') {
+            if (jsTemplates.includes(req.url.slice(1))) {
+                const path = await toJSFile(__dirname, req.url.slice(1));
+                request.sendFile(path, 'js');
+            } else {
+                request.notFound();
+            }
         } else {
-            res.writeHead(404, {'Content-Type': 'text/html'});
-            res.write('<h2>Page Not Found</h2>');
-        };
-        res.end();
+            request.notFound();
+        }
     } else {
         throw new Error('Method not allowed');
     };
     
 });
 
-console.log(PORT);
 server.listen(8081, () => {
-    console.log("Server Booted");
+    console.log("Server Booted: ", PORT);
 })

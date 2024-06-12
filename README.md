@@ -18,3 +18,7 @@ I would recommend you get rid of the **/clearServer** request as anyone can acce
 ## Uses:
 This software is unlicensed so use as you wish. I would like credit but it's up to you. 
 The code has been <sub><sup>attempted</sup></sub> to be made as modular as possible.
+
+## Extras:
+Find the trello board for this project here: <br>
+https://trello.com/b/cJVNpzAB/logintest
