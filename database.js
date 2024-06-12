@@ -18,7 +18,9 @@ class Database {
         if (DBKEY == key) {
             const tables = await this.getFunc("SELECT name FROM sqlite_master WHERE type='table'");
             for (let i=0; i < tables.length; i++) {
-                this.runFunc(`DROP TABLE IF EXISTS ${tables[i].name}`);
+                if (tables[i].name != 'sqlite_sequence') {
+                    this.runFunc(`DROP TABLE IF EXISTS ${tables[i].name}`);
+                }
             }
         } else {
             console.log('Key provided does not match DBKEY');

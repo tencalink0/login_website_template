@@ -11,6 +11,7 @@
     "author": "tencalink0",
     "license": "none",
     "dependencies": {
+        "cookie-parser": "^1.4.6",
         "nodemon": "^3.1.3",
         "sqlite3": "^5.1.7"
     }

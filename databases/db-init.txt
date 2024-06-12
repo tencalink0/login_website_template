@@ -1,3 +1,4 @@
-CREATE TABLE logins (userID INT PRIMARY KEY, username varchar(64), password varchar(64));
-CREATE TABLE requests (requestID INT PRIAMRY KEY, ip varchar(64), username varchar(64), time varchar(64), page varchar(64));
-INSERT INTO logins (username, password) VALUES ('Admin', 'Admin123')
+CREATE TABLE logins (userID INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, unique_key TEXT, status INTEGER);
+CREATE TABLE requests (requestID INTEGER PRIMARY KEY AUTOINCREMENT, ip TEXT, username TEXT, time TEXT, page TEXT);
+INSERT INTO logins (username, password, status) VALUES ('Admin', 'Admin123', 1)
+INSERT INTO logins (username, password, status) VALUES ('Sub-Admin', 'Subad123', 2)
