@@ -10,10 +10,10 @@ To create a simple Login System using NodeJS as a proof of concept.
 - **SQLITE** integration
 
 ## Setup:
-So far, to set the program up, you must create a **logins.db** file under the databases
-folder and run **databases.init()** or visit **/clearServer**. The rest should be already
-set up. <br>
-I would recommend you get rid of the **/clearServer** request as anyone can access it.
+- To set the server up, you must create a **logins.db** file under the databases
+folder and run **databases.init()** or visit **/clearServer**
+Tip: I would recommend you get rid of the **/clearServer** request as anyone can access it. <br>
+- To run the server, do npm run dev (in the root directory)
 
 ## Uses:
 This software is unlicensed so use as you wish. I would like credit but it's up to you. 

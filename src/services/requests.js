@@ -3,10 +3,10 @@ import fs from 'fs/promises';
 import {getHeader} from '../utils/basic_functions.js';
 
 class Request {
-    constructor(req, res, database, user) {
+    constructor(req, res, sql, user) {
         this.req = req
         this.res = res
-        this.database = database
+        this.sql = sql
         this.user = user
 
         this.now = new Date();
@@ -18,8 +18,7 @@ class Request {
         this.res.write(fileData);
         const timeNow = this.now.toISOString().slice(0, 19).replace('T', ' ');
         if (getHeader(filePath) == 'html') {
-            
-            this.database.runFunc(`INSERT INTO requests (ip, username, time, page) VALUES ('${this.user.ip}', '${this.user.name}','${timeNow}','${this.req.url}')`);
+            await this.sql.run('logRequest', this.user.ip + `', '` + this.user.name + `', '` + timeNow + `', '` + this.req.url);
             console.log("\x1b[32m" + this.user.ip + ' :: ' + this.req.url + "\x1b[0m");
         }    
         this.res.end();

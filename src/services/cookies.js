@@ -1,29 +1,23 @@
 import cookie from 'cookie';
-import {hash256S} from '../utils/conversions.js';
-import {Database} from '../db/database.js'
+import {hash256, hash256S} from '../utils/conversions.js';
 
 class Cookies {
-    constructor(req, res, database) {
+    constructor(req, res, sql) {
         this.req = req;
         this.res = res;
         this.now = new Date();
-        this.database = database;
+        this.sql = sql;
     }
 
     async set(username, password, userID) {
         const timeNow = this.now.toISOString().slice(0, 19).replace('T', ' ');
-        const loginHash = await hash256(username + password + userID + timeNow);
-        const passwordHash = await hash256(password); 
+        const loginHash = await hash256(username + password + timeNow);
         
         this.res.setHeader('Set-Cookie', [
-            `login=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Path=/`,
-            `password=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Path=/`,
-            `id=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Path=/`
+            `loginHash=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Path=/`
         ]);
         this.res.setHeader('Set-Cookie', [
-            `login=${loginHash}; HttpOnly; Path=/`,
-            `password=${passwordHash}; HttpOnly; Path=/`,
-            `id=${userID}; HttpOnly; Path=/`
+            `loginHash=${loginHash}; HttpOnly; Path=/`
         ]);
 
         return loginHash;
@@ -53,19 +47,16 @@ class Cookies {
     }
 
     async getUsername() {
-        const logins = await this.database.getFunc('SELECT * FROM logins;');
-        const cookieID = await this.get('id');
-        const cookiePassword = await this.get('password');
+        const logins = await this.sql.get('users');
+        const loginHash = await this.get('loginHash');
 
         return new Promise((resolve, reject) => {
-            if (cookieID) {
+            if (loginHash) {
                 for (let i = 0; i < logins.length; i++) {
                     try {
-                        if (logins[i].userID == cookieID) {
-                            if (hash256S(logins[i].password) == cookiePassword) {
-                                resolve(logins[i].username);
-                                return;
-                            }
+                        if (logins[i].loginHash == loginHash) {
+                            resolve(logins[i].username);
+                            return;
                         } 
                     } catch (errs) {
                         resolve(null);

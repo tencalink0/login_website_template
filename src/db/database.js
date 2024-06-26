@@ -32,7 +32,7 @@ class Database {
     async init(key) {
         let dbClearStat = await this.clear(key);
         if (dbClearStat) {
-            const fileContents = await readTextFile('databases/db-init.txt');
+            const fileContents = await readTextFile('databases/db-init.sql');
             for (let i=0; i < fileContents.length; i++) {
                 try {
                     await this.runFunc(fileContents[i]);
@@ -49,13 +49,15 @@ class Database {
 
     runFunc(sql) {
         return new Promise((resolve, reject) => {
-            console.log("\x1b[33mSQL: " + sql + "\x1b[0m");
+            console.log("\x1b[33mSQL: " + sql + "\x1b[0m"); /*Uncomment this to get sql run functions displayed*/
             this.db.run(sql, (err) => {
                 if (err) {
                     console.log("Database query failed ", err);
                     reject(err);
+                    return;
                 } else {
                     resolve();
+                    return;
                 }
             });
         });
@@ -63,13 +65,15 @@ class Database {
 
     getFunc(sql) {
         return new Promise((resolve, reject) => {
-            console.log("\x1b[34mSQL: " + sql + "\x1b[0m");
+            //console.log("\x1b[34mSQL: " + sql + "\x1b[0m"); /*Uncomment this to get sql request functions displayed*/
             this.db.all(sql, (err, sqlData) => {
                 if (err) {
                     console.log("Database query failed ", err);
                     reject(err);
+                    return;
                 } else {
                     resolve(sqlData);
+                    return;
                 }
             });
         });

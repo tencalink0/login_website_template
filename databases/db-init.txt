@@ -1,4 +1,0 @@
-CREATE TABLE logins (userID INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, unique_key TEXT, status INTEGER);
-CREATE TABLE requests (requestID INTEGER PRIMARY KEY AUTOINCREMENT, ip TEXT, username TEXT, time TEXT, page TEXT);
-INSERT INTO logins (username, password, status) VALUES ('Admin', 'Admin123', 1)
-INSERT INTO logins (username, password, status) VALUES ('Sub-Admin', 'Subad123', 2)
