@@ -11,8 +11,8 @@ To create a simple Login System using NodeJS as a proof of concept.
 
 ## Setup:
 - To set the server up, you must create a **logins.db** file under the databases
-folder and run **databases.init()** or visit **/clearServer**
-Tip: I would recommend you get rid of the **/clearServer** request as anyone can access it. <br>
+folder and run **databases.init()** or visit **/clearServer** <br>
+<sub><sup>Tip: I would recommend you get rid of the **/clearServer** request as anyone can access it. <br>
 - To run the server, do npm run dev (in the root directory)
 
 ## Uses:
